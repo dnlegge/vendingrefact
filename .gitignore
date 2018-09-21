@@ -1,3 +1,6 @@
 target
 reports
 
+*.iml
+*.ipr
+*.iws
