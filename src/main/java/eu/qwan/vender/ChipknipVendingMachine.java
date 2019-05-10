@@ -37,23 +37,23 @@ public class ChipknipVendingMachine implements VendingMachine {
         //
         // step2 : check price
         //
-        if (cans.get(choice).price == 0) {
+        if (cans.get(choice).getPrice() == 0) {
             res = cans.get(choice).getType();
             // or price matches
         } else {
 
             switch (paymentMethod) {
                 case CASH: // paying with coins
-                    if (cashValueInserted != -1 && cans.get(choice).price <= cashValueInserted) {
+                    if (cashValueInserted != -1 && cans.get(choice).getPrice() <= cashValueInserted) {
                         res = cans.get(choice).getType();
-                        cashValueInserted -= cans.get(choice).price;
+                        cashValueInserted -= cans.get(choice).getPrice();
                     }
                     break;
                 case CHIPKNIP: // paying with chipknip -
                     // TODO: if this machine is in belgium this must be an error
                     // {
-                    if (chipknip.HasValue(cans.get(choice).price)) {
-                        chipknip.Reduce(cans.get(choice).price);
+                    if (chipknip.HasValue(cans.get(choice).getPrice())) {
+                        chipknip.Reduce(cans.get(choice).getPrice());
                         res = cans.get(choice).getType();
                     }
                     break;

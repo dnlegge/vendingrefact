@@ -2,6 +2,8 @@ package eu.qwan.vender;
 
 public class CanContainer {
 	private Can type;
+    private int price;
+    private int amount;
 
     public CanContainer(Can type, int price, int amount) {
         this.type = type;
@@ -13,21 +15,9 @@ public class CanContainer {
 		return type;
 	}
 
-	public void setType(Can type) {
-		this.type = type;
-	}
-
-	int price;
-
 	public int getPrice() {
 		return price;
 	}
-
-	public void setPrice(int price) {
-		this.price = price;
-	}
-
-	private int amount;
 
 	public int getAmount() {
 		return amount;
