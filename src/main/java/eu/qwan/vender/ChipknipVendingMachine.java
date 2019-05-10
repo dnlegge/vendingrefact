@@ -30,44 +30,44 @@ public class ChipknipVendingMachine implements VendingMachine {
         //
         // step 1: check if choice exists {
         //
-        if (cans.containsKey(choice)) {
-            //
-            // step2 : check price
-            //
-            if (cans.get(choice).price == 0) {
-                res = cans.get(choice).getType();
-                // or price matches
-            } else {
+        if (!cans.containsKey(choice)) {
+            return Can.none;
+        }
 
-                switch (paymentMethod) {
-                    case CASH: // paying with coins
-                        if (cashValueInserted != -1 && cans.get(choice).price <= cashValueInserted) {
-                            res = cans.get(choice).getType();
-                            cashValueInserted -= cans.get(choice).price;
-                        }
-                        break;
-                    case CHIPKNIP: // paying with chipknip -
-                        // TODO: if this machine is in belgium this must be an error
-                        // {
-                        if (chipknip.HasValue(cans.get(choice).price)) {
-                            chipknip.Reduce(cans.get(choice).price);
-                            res = cans.get(choice).getType();
-                        }
-                        break;
-                    default:
-                        // TODO: Is this a valid situation?:
-                        // larry forgot the } else { clause
-                        // i added it, but i am acutally not sure as to wether this
-                        // is a problem
-                        // unknown payment
+        //
+        // step2 : check price
+        //
+        if (cans.get(choice).price == 0) {
+            res = cans.get(choice).getType();
+            // or price matches
+        } else {
+
+            switch (paymentMethod) {
+                case CASH: // paying with coins
+                    if (cashValueInserted != -1 && cans.get(choice).price <= cashValueInserted) {
+                        res = cans.get(choice).getType();
+                        cashValueInserted -= cans.get(choice).price;
+                    }
+                    break;
+                case CHIPKNIP: // paying with chipknip -
+                    // TODO: if this machine is in belgium this must be an error
+                    // {
+                    if (chipknip.HasValue(cans.get(choice).price)) {
+                        chipknip.Reduce(cans.get(choice).price);
+                        res = cans.get(choice).getType();
+                    }
+                    break;
+                default:
+                    // TODO: Is this a valid situation?:
+                    // larry forgot the } else { clause
+                    // i added it, but i am acutally not sure as to wether this
+                    // is a problem
+                    // unknown payment
 //                        res =  Can.none;
 //                        return Can.none;
-                        break;
-                    // i think(i) nobody inserted anything
-                }
+                    break;
+                // i think(i) nobody inserted anything
             }
-        } else {
-            res = Can.none;
         }
 
         //
