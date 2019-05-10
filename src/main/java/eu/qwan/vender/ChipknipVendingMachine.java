@@ -32,26 +32,28 @@ public class ChipknipVendingMachine implements VendingMachine {
         if (!cans.containsKey(choice)) {
             return Can.none;
         }
+
+        //
+        // step2 : check price
+        //
         Can res = handlePayment(choice);
+
+        if (res == Can.none) {
+            return res;
+        }
 
         //
         // step 3: check stock
         //
-        if (res != Can.none) {
-            if (cans.get(choice).getAmount() <= 0) {
-                res = Can.none;
-            } else {
-                cans.get(choice).setAmount(cans.get(choice).getAmount() - 1);
-            }
+        if (cans.get(choice).getAmount() <= 0) {
+            return Can.none;
         }
 
+        cans.get(choice).setAmount(cans.get(choice).getAmount() - 1);
         return res;
     }
 
     private Can handlePayment(Choice choice) {
-        //
-        // step2 : check price
-        //
         if (cans.get(choice).getPrice() == 0) {
             return cans.get(choice).getType();
             // or price matches
