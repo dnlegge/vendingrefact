@@ -7,16 +7,15 @@ public class VendingMachine {
     private final Map<Choice, CanContainer> cans = new HashMap<>();
     private PaymentMethod paymentMethod = PaymentMethod.NONE;
     private Chipknip chipknip;
-    private int c = -1;
-    private int price;
+    private int cashValueInserted = 0;
 
     public void set_value(int v) {
         paymentMethod = PaymentMethod.CASH;
-        if (c != -1) {
-            c += v;
-        } else {
-            c = v;
-        }
+//        if (cashValueInserted != -1) {
+        cashValueInserted += v;
+//        } else {
+//            cashValueInserted = v;
+//        }
     }
 
     public void insert_chip(Chipknip chipknip) {
@@ -43,9 +42,9 @@ public class VendingMachine {
 
                 switch (paymentMethod) {
                     case CASH: // paying with coins
-                        if (c != -1 && cans.get(choice).price <= c) {
+                        if (cashValueInserted != -1 && cans.get(choice).price <= cashValueInserted) {
                             res = cans.get(choice).getType();
-                            c -= cans.get(choice).price;
+                            cashValueInserted -= cans.get(choice).price;
                         }
                         break;
                     case CHIPKNIP: // paying with chipknip -
@@ -94,9 +93,9 @@ public class VendingMachine {
 
     public int get_change() {
         int to_return = 0;
-        if (c > 0) {
-            to_return = c;
-            c = 0;
+        if (cashValueInserted > 0) {
+            to_return = cashValueInserted;
+            cashValueInserted = 0;
         }
         return to_return;
     }
@@ -106,15 +105,11 @@ public class VendingMachine {
     }
 
     public void configure(Choice choice, Can can, int n, int price) {
-//        this.price = price;
         if (cans.containsKey(choice)) {
             cans.get(choice).setAmount(cans.get(choice).getAmount() + n);
             return;
         }
         CanContainer canContainer = new CanContainer(can, price, n);
-//        can.setType(c);
-//        can.setAmount(n);
-//        can.setPrice(price);
         cans.put(choice, canContainer);
     }
 }
