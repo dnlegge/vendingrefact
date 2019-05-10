@@ -105,16 +105,16 @@ public class VendingMachine {
         configure(choice, c, n, 0);
     }
 
-    public void configure(Choice choice, Can c, int n, int price) {
-        this.price = price;
+    public void configure(Choice choice, Can can, int n, int price) {
+//        this.price = price;
         if (cans.containsKey(choice)) {
             cans.get(choice).setAmount(cans.get(choice).getAmount() + n);
             return;
         }
-        CanContainer can = new CanContainer();
-        can.setType(c);
-        can.setAmount(n);
-        can.setPrice(price);
-        cans.put(choice, can);
+        CanContainer canContainer = new CanContainer(can, price, n);
+//        can.setType(c);
+//        can.setAmount(n);
+//        can.setPrice(price);
+        cans.put(choice, canContainer);
     }
 }
