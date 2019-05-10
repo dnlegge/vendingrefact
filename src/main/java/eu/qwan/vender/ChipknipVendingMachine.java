@@ -86,12 +86,9 @@ public class ChipknipVendingMachine implements VendingMachine {
 
     @Override
     public int getChange() {
-        int to_return = 0;
-        if (cashValueInserted > 0) {
-            to_return = cashValueInserted;
-            cashValueInserted = 0;
-        }
-        return to_return;
+        int toReturn = cashValueInserted;
+        cashValueInserted = 0;
+        return toReturn;
     }
 
     public void configure(Choice choice, Can c, int n) {
