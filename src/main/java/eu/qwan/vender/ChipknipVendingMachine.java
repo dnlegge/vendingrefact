@@ -81,12 +81,6 @@ public class ChipknipVendingMachine implements VendingMachine {
             }
         }
 
-        // if can is set then return {
-        // otherwise we need to return the none
-        if (res == Can.none) {
-            return Can.none;
-        }
-
         return res;
     }
 
