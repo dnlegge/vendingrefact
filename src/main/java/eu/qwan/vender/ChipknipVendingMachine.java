@@ -33,10 +33,12 @@ public class ChipknipVendingMachine implements VendingMachine {
             return Can.none;
         }
 
+        CanContainer canContainer = cans.get(choice);
+
         //
         // step2 : check price
         //
-        Can res = handlePayment(choice);
+        Can res = handlePayment(canContainer);
 
         if (res == Can.none) {
             return res;
@@ -45,32 +47,32 @@ public class ChipknipVendingMachine implements VendingMachine {
         //
         // step 3: check stock
         //
-        if (cans.get(choice).getAmount() <= 0) {
+        if (canContainer.getAmount() <= 0) {
             return Can.none;
         }
 
-        cans.get(choice).setAmount(cans.get(choice).getAmount() - 1);
+        canContainer.setAmount(canContainer.getAmount() - 1);
         return res;
     }
 
-    private Can handlePayment(Choice choice) {
-        if (cans.get(choice).getPrice() == 0) {
-            return cans.get(choice).getType();
+    private Can handlePayment(CanContainer canContainer) {
+        if (canContainer.getPrice() == 0) {
+            return canContainer.getType();
             // or price matches
         }
 
         switch (paymentMethod) {
             case CASH: // paying with coins
-                if (cans.get(choice).getPrice() <= cashValueInserted) {
-                    cashValueInserted -= cans.get(choice).getPrice();
-                    return cans.get(choice).getType();
+                if (canContainer.getPrice() <= cashValueInserted) {
+                    cashValueInserted -= canContainer.getPrice();
+                    return canContainer.getType();
                 }
                 break;
             case CHIPKNIP: // paying with chipknip -
                 // TODO: if this machine is in belgium this must be an error
-                if (chipknip.HasValue(cans.get(choice).getPrice())) {
-                    chipknip.Reduce(cans.get(choice).getPrice());
-                    return cans.get(choice).getType();
+                if (chipknip.HasValue(canContainer.getPrice())) {
+                    chipknip.Reduce(canContainer.getPrice());
+                    return canContainer.getType();
                 }
                 break;
             default:
