@@ -42,12 +42,14 @@ public class ChipknipVendingMachine implements VendingMachine {
     }
 
     private Can getCanIfAvailable(CanContainer canContainer, Can res) {
-        if (canContainer.getAmount() <= 0) {
-            return Can.none;
-        }
+        if (stockIsAvailable(canContainer)) return Can.none;
 
         canContainer.setAmount(canContainer.getAmount() - 1);
         return res;
+    }
+
+    private boolean stockIsAvailable(CanContainer canContainer) {
+        return canContainer.getAmount() <= 0;
     }
 
     private Can handlePayment(CanContainer canContainer) {
