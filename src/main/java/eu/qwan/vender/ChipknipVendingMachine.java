@@ -38,16 +38,7 @@ public class ChipknipVendingMachine implements VendingMachine {
         //
         // step2 : check price
         //
-        Can res = handlePayment(canContainer);
-
-        if (res == Can.none) {
-            return res;
-        }
-
-        //
-        // step 3: check stock
-        //
-        return getCanIfAvailable(canContainer, res);
+        return handlePayment(canContainer);
     }
 
     private Can getCanIfAvailable(CanContainer canContainer, Can res) {
@@ -61,22 +52,24 @@ public class ChipknipVendingMachine implements VendingMachine {
 
     private Can handlePayment(CanContainer canContainer) {
         if (canContainer.getPrice() == 0) {
-            return canContainer.getType();
+            return getCanIfAvailable(canContainer, canContainer.getType());
             // or price matches
         }
 
         switch (paymentMethod) {
             case CASH: // paying with coins
                 if (canContainer.getPrice() <= cashValueInserted) {
+                    Can res = getCanIfAvailable(canContainer, canContainer.getType());
                     cashValueInserted -= canContainer.getPrice();
-                    return canContainer.getType();
+                    return res;
                 }
                 break;
             case CHIPKNIP: // paying with chipknip -
                 // TODO: if this machine is in belgium this must be an error
                 if (chipknip.HasValue(canContainer.getPrice())) {
+                    Can res = getCanIfAvailable(canContainer, canContainer.getType());
                     chipknip.Reduce(canContainer.getPrice());
-                    return canContainer.getType();
+                    return res;
                 }
                 break;
             default:
