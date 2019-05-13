@@ -26,19 +26,40 @@ public class ChipknipVendingMachine implements VendingMachine {
     // delivers the can if all ok {
     @Override
     public Can deliver(Choice choice) {
-        //
+
         // step 1: check if choice exists {
-        //
         if (!cans.containsKey(choice)) {
             return Can.none;
         }
 
         CanContainer canContainer = cans.get(choice);
 
-        //
-        // step2 : check price
-        //
-        return handlePayment(canContainer);
+        //free vend
+        if (canContainer.getPrice() == 0) {
+            return getCanOrNone(canContainer);
+        }
+
+        switch (paymentMethod) {
+            case CASH:
+                if (canContainer.getPrice() <= cashValueInserted) {
+                    Can res = getCanOrNone(canContainer);
+                    cashValueInserted -= canContainer.getPrice();
+                    return res;
+                }
+                break;
+            case CHIPKNIP:
+                // TODO: if this machine is in belgium this must be an error
+                if (chipknip.HasValue(canContainer.getPrice())) {
+                    Can res = getCanOrNone(canContainer);
+                    chipknip.Reduce(canContainer.getPrice());
+                    return res;
+                }
+                break;
+            default:
+                break;
+        }
+
+        return Can.none;
     }
 
     private Can getCanOrNone(CanContainer canContainer) {
@@ -52,35 +73,6 @@ public class ChipknipVendingMachine implements VendingMachine {
 
     private boolean stockIsAvailable(CanContainer canContainer) {
         return canContainer.getAmount() <= 0;
-    }
-
-    private Can handlePayment(CanContainer canContainer) {
-        if (canContainer.getPrice() == 0) {
-            return getCanOrNone(canContainer);
-            // or price matches
-        }
-
-        switch (paymentMethod) {
-            case CASH: // paying with coins
-                if (canContainer.getPrice() <= cashValueInserted) {
-                    Can res = getCanOrNone(canContainer);
-                    cashValueInserted -= canContainer.getPrice();
-                    return res;
-                }
-                break;
-            case CHIPKNIP: // paying with chipknip -
-                // TODO: if this machine is in belgium this must be an error
-                if (chipknip.HasValue(canContainer.getPrice())) {
-                    Can res = getCanOrNone(canContainer);
-                    chipknip.Reduce(canContainer.getPrice());
-                    return res;
-                }
-                break;
-            default:
-                break;
-        }
-
-        return Can.none;
     }
 
     @Override
