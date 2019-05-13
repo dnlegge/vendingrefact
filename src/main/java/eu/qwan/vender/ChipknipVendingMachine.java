@@ -18,7 +18,7 @@ public class ChipknipVendingMachine implements VendingMachine {
     @Override
     public void insertChip(Chipknip chipknip) {
         // TODO
-        // can't pay with chip in brittain
+        // can't pay with chip in Britain
         paymentMethod = PaymentMethod.CHIPKNIP;
         this.chipknip = chipknip;
     }
@@ -41,11 +41,13 @@ public class ChipknipVendingMachine implements VendingMachine {
         return handlePayment(canContainer);
     }
 
-    private Can getCanIfAvailable(CanContainer canContainer, Can res) {
-        if (stockIsAvailable(canContainer)) return Can.none;
+    private Can getCanOrNone(CanContainer canContainer) {
+        if (stockIsAvailable(canContainer)) {
+            return Can.none;
+        }
 
         canContainer.setAmount(canContainer.getAmount() - 1);
-        return res;
+        return canContainer.getType();
     }
 
     private boolean stockIsAvailable(CanContainer canContainer) {
@@ -54,14 +56,14 @@ public class ChipknipVendingMachine implements VendingMachine {
 
     private Can handlePayment(CanContainer canContainer) {
         if (canContainer.getPrice() == 0) {
-            return getCanIfAvailable(canContainer, canContainer.getType());
+            return getCanOrNone(canContainer);
             // or price matches
         }
 
         switch (paymentMethod) {
             case CASH: // paying with coins
                 if (canContainer.getPrice() <= cashValueInserted) {
-                    Can res = getCanIfAvailable(canContainer, canContainer.getType());
+                    Can res = getCanOrNone(canContainer);
                     cashValueInserted -= canContainer.getPrice();
                     return res;
                 }
@@ -69,7 +71,7 @@ public class ChipknipVendingMachine implements VendingMachine {
             case CHIPKNIP: // paying with chipknip -
                 // TODO: if this machine is in belgium this must be an error
                 if (chipknip.HasValue(canContainer.getPrice())) {
-                    Can res = getCanIfAvailable(canContainer, canContainer.getType());
+                    Can res = getCanOrNone(canContainer);
                     chipknip.Reduce(canContainer.getPrice());
                     return res;
                 }
