@@ -29,23 +29,24 @@ public class ChipknipVendingMachine implements VendingMachine {
         CanContainer canContainer = cans.get(choice);
 
         //free vend
-        if (canContainer.getPrice() == 0) {
+        int price = canContainer.getPrice();
+        if (price == 0) {
             return getCanOrNone(canContainer);
         }
 
-        switch (payment.paymentMethod) {
+        switch (payment.getPaymentMethod()) {
             case CASH:
-                if (canContainer.getPrice() <= payment.getCashBalance()) {
+                if (payment.hasSufficientBalance(price)) {
                     Can res = getCanOrNone(canContainer);
-                    payment.insertCash(-canContainer.getPrice());
+                    payment.reduceBalance(price);
                     return res;
                 }
                 break;
             case CHIPKNIP:
                 // TODO: if this machine is in belgium this must be an error
-                if (payment.hasValue(canContainer.getPrice())) {
+                if (payment.hasSufficientBalance(price)) {
                     Can res = getCanOrNone(canContainer);
-                    payment.getChipknip().Reduce(canContainer.getPrice());
+                    payment.reduceBalance(price);
                     return res;
                 }
                 break;
@@ -71,12 +72,7 @@ public class ChipknipVendingMachine implements VendingMachine {
 
     @Override
     public int getChange() {
-        if (payment.paymentMethod == PaymentMethod.CASH) {
-            int toReturn = payment.getCashBalance();
-            payment.insertCash(-toReturn);
-            return toReturn;
-        }
-        return 0;
+        return payment.getChange();
     }
 
     public void configure(Choice choice, Can c, int n) {

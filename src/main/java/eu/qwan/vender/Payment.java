@@ -1,7 +1,7 @@
 package eu.qwan.vender;
 
 public class Payment {
-    PaymentMethod paymentMethod = PaymentMethod.CASH;
+    private PaymentMethod paymentMethod = PaymentMethod.CASH;
     private Chipknip chipknip;
     private int cashValueInserted = 0;
 
@@ -15,16 +15,38 @@ public class Payment {
         this.chipknip = chipknip;
     }
 
-    public int getCashBalance() {
-        return cashValueInserted;
+    public PaymentMethod getPaymentMethod() {
+        return paymentMethod;
     }
 
-    public Chipknip getChipknip() {
-        return chipknip;
+    public boolean hasSufficientBalance(int value) {
+        if (paymentMethod == PaymentMethod.CHIPKNIP) {
+            return chipknip.HasValue(value);
+        }
+        return value <= cashValueInserted;
     }
 
-    public boolean hasValue(int value) {
-        return chipknip.HasValue(value);
+    public void reduceBalance(int value) {
+        if (paymentMethod == PaymentMethod.CHIPKNIP) {
+            chipknip.Reduce(value);
+            return;
+        }
+        cashValueInserted -= value;
     }
+
+    public int getChange() {
+        if (paymentMethod == PaymentMethod.CHIPKNIP) {
+
+            paymentMethod = PaymentMethod.CASH;
+            return 0;
+        }
+        int changeToReturn = cashValueInserted;
+        cashValueInserted = 0;
+        return changeToReturn;
+    }
+
+//  public boolean hasValue(int value) {
+//        return chipknip.HasValue(value);
+//    }
 
 }
