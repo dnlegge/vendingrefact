@@ -1,45 +1,13 @@
 package eu.qwan.vender;
 
-public class Payment {
-    private PaymentMethod paymentMethod = PaymentMethod.CASH;
-    private Chipknip chipknip = null;
-    private int cashValueInserted = 0;
+public interface Payment {
+    void insertCash(int amountInserted);
 
-    public void insertCash(int amountInserted) {
-        paymentMethod = PaymentMethod.CASH;
-        cashValueInserted += amountInserted;
-        chipknip = null;
-    }
+    void insertChip(Chipknip chipknip);
 
-    public void insertChip(Chipknip chipknip) {
-        paymentMethod = PaymentMethod.CHIPKNIP;
-        this.chipknip = chipknip;
-    }
+    boolean hasSufficientBalance(int value);
 
-    public boolean hasSufficientBalance(int value) {
-        if (paymentMethod == PaymentMethod.CHIPKNIP) {
-            return chipknip.HasValue(value);
-        }
-        return value <= cashValueInserted;
-    }
+    void reduceBalance(int value);
 
-    public void reduceBalance(int value) {
-        if (paymentMethod == PaymentMethod.CHIPKNIP) {
-            chipknip.Reduce(value);
-            return;
-        }
-        cashValueInserted -= value;
-    }
-
-    public int getChange() {
-        if (paymentMethod == PaymentMethod.CHIPKNIP) {
-            paymentMethod = PaymentMethod.CASH;
-            chipknip = null;
-            return 0;
-        }
-        int changeToReturn = cashValueInserted;
-        cashValueInserted = 0;
-        return changeToReturn;
-    }
-
+    int getChange();
 }

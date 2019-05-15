@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class ChipknipVendingMachine implements VendingMachine {
     private final Map<Choice, CanContainer> canContainerMap = new HashMap<>();
-    private Payment payment = new Payment();
+    private Payment payment = new CashChipknipPayment();
 
     @Override
     public void insertCash(int amountInserted) {
