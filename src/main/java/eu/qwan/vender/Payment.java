@@ -34,6 +34,7 @@ public class Payment {
     public int getChange() {
         if (paymentMethod == PaymentMethod.CHIPKNIP) {
             paymentMethod = PaymentMethod.CASH;
+            chipknip = null;
             return 0;
         }
         int changeToReturn = cashValueInserted;
