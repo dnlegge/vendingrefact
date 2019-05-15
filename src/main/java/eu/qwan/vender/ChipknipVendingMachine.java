@@ -35,8 +35,11 @@ public class ChipknipVendingMachine implements VendingMachine {
 
         if (payment.hasSufficientBalance(price)) {
             Can canOrNone = getCanOrNone(canContainer);
-            payment.reduceBalance(price);
+            if (canOrNone != Can.none) {
+                payment.reduceBalance(price);
+            }
             return canOrNone;
+
         }
 
         return Can.none;
