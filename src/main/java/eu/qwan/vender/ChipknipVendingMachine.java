@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ChipknipVendingMachine implements VendingMachine {
-    private final Map<Choice, CanContainer> cans = new HashMap<>();
+    private final Map<Choice, CanContainer> canContainerMap = new HashMap<>();
     private Payment payment = new Payment();
 
     @Override
@@ -21,11 +21,11 @@ public class ChipknipVendingMachine implements VendingMachine {
     public Can deliver(Choice choice) {
 
         // step 1: check if choice exists {
-        if (!cans.containsKey(choice)) {
+        if (!canContainerMap.containsKey(choice)) {
             return Can.none;
         }
 
-        CanContainer canContainer = cans.get(choice);
+        CanContainer canContainer = canContainerMap.get(choice);
 
         //free vend
         int price = canContainer.getPrice();
@@ -60,16 +60,16 @@ public class ChipknipVendingMachine implements VendingMachine {
         return payment.getChange();
     }
 
-    public void configure(Choice choice, Can c, int n) {
-        configure(choice, c, n, 0);
+    public void configure(Choice choice, Can typeOfCan, int numberOfCans) {
+        configure(choice, typeOfCan, numberOfCans, 0);
     }
 
-    public void configure(Choice choice, Can can, int n, int price) {
-        if (cans.containsKey(choice)) {
-            cans.get(choice).setAmount(cans.get(choice).getAmount() + n);
+    public void configure(Choice choice, Can typeOfCan, int numberOfCans, int price) {
+        if (canContainerMap.containsKey(choice)) {
+            canContainerMap.get(choice).setAmount(canContainerMap.get(choice).getAmount() + numberOfCans);
             return;
         }
-        CanContainer canContainer = new CanContainer(can, price, n);
-        cans.put(choice, canContainer);
+        CanContainer canContainer = new CanContainer(typeOfCan, price, numberOfCans);
+        canContainerMap.put(choice, canContainer);
     }
 }
