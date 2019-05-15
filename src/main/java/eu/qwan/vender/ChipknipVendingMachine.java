@@ -34,24 +34,10 @@ public class ChipknipVendingMachine implements VendingMachine {
             return getCanOrNone(canContainer);
         }
 
-        switch (payment.getPaymentMethod()) {
-            case CASH:
-                if (payment.hasSufficientBalance(price)) {
-                    Can res = getCanOrNone(canContainer);
-                    payment.reduceBalance(price);
-                    return res;
-                }
-                break;
-            case CHIPKNIP:
-                // TODO: if this machine is in belgium this must be an error
-                if (payment.hasSufficientBalance(price)) {
-                    Can res = getCanOrNone(canContainer);
-                    payment.reduceBalance(price);
-                    return res;
-                }
-                break;
-            default:
-                break;
+        if (payment.hasSufficientBalance(price)) {
+            Can res = getCanOrNone(canContainer);
+            payment.reduceBalance(price);
+            return res;
         }
 
         return Can.none;
