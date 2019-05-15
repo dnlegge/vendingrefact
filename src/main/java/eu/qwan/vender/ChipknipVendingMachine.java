@@ -5,22 +5,16 @@ import java.util.Map;
 
 public class ChipknipVendingMachine implements VendingMachine {
     private final Map<Choice, CanContainer> cans = new HashMap<>();
-    private PaymentMethod paymentMethod = PaymentMethod.NONE;
-    private Chipknip chipknip;
-    private int cashValueInserted = 0;
+    private Payment payment = new Payment();
 
     @Override
     public void insertCash(int amountInserted) {
-        paymentMethod = PaymentMethod.CASH;
-        cashValueInserted += amountInserted;
+        payment.insertCash(amountInserted);
     }
 
     @Override
     public void insertChip(Chipknip chipknip) {
-        // TODO
-        // can't pay with chip in Britain
-        paymentMethod = PaymentMethod.CHIPKNIP;
-        this.chipknip = chipknip;
+        payment.insertChip(chipknip);
     }
 
     // delivers the can if all ok {
@@ -39,19 +33,19 @@ public class ChipknipVendingMachine implements VendingMachine {
             return getCanOrNone(canContainer);
         }
 
-        switch (paymentMethod) {
+        switch (payment.paymentMethod) {
             case CASH:
-                if (canContainer.getPrice() <= cashValueInserted) {
+                if (canContainer.getPrice() <= payment.getCashBalance()) {
                     Can res = getCanOrNone(canContainer);
-                    cashValueInserted -= canContainer.getPrice();
+                    payment.insertCash(-canContainer.getPrice());
                     return res;
                 }
                 break;
             case CHIPKNIP:
                 // TODO: if this machine is in belgium this must be an error
-                if (chipknip.HasValue(canContainer.getPrice())) {
+                if (payment.hasValue(canContainer.getPrice())) {
                     Can res = getCanOrNone(canContainer);
-                    chipknip.Reduce(canContainer.getPrice());
+                    payment.getChipknip().Reduce(canContainer.getPrice());
                     return res;
                 }
                 break;
@@ -77,9 +71,12 @@ public class ChipknipVendingMachine implements VendingMachine {
 
     @Override
     public int getChange() {
-        int toReturn = cashValueInserted;
-        cashValueInserted = 0;
-        return toReturn;
+        if (payment.paymentMethod == PaymentMethod.CASH) {
+            int toReturn = payment.getCashBalance();
+            payment.insertCash(-toReturn);
+            return toReturn;
+        }
+        return 0;
     }
 
     public void configure(Choice choice, Can c, int n) {
