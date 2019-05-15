@@ -2,12 +2,13 @@ package eu.qwan.vender;
 
 public class Payment {
     private PaymentMethod paymentMethod = PaymentMethod.CASH;
-    private Chipknip chipknip;
+    private Chipknip chipknip = null;
     private int cashValueInserted = 0;
 
     public void insertCash(int amountInserted) {
         paymentMethod = PaymentMethod.CASH;
         cashValueInserted += amountInserted;
+        chipknip = null;
     }
 
     public void insertChip(Chipknip chipknip) {
