@@ -17,7 +17,6 @@ public class ChipknipVendingMachine implements VendingMachine {
         payment.insertChip(chipknip);
     }
 
-    // delivers the can if all ok {
     @Override
     public Can deliver(Choice choice) {
 
@@ -35,9 +34,9 @@ public class ChipknipVendingMachine implements VendingMachine {
         }
 
         if (payment.hasSufficientBalance(price)) {
-            Can res = getCanOrNone(canContainer);
+            Can canOrNone = getCanOrNone(canContainer);
             payment.reduceBalance(price);
-            return res;
+            return canOrNone;
         }
 
         return Can.none;

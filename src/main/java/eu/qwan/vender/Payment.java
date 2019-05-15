@@ -15,10 +15,6 @@ public class Payment {
         this.chipknip = chipknip;
     }
 
-    public PaymentMethod getPaymentMethod() {
-        return paymentMethod;
-    }
-
     public boolean hasSufficientBalance(int value) {
         if (paymentMethod == PaymentMethod.CHIPKNIP) {
             return chipknip.HasValue(value);
@@ -36,7 +32,6 @@ public class Payment {
 
     public int getChange() {
         if (paymentMethod == PaymentMethod.CHIPKNIP) {
-
             paymentMethod = PaymentMethod.CASH;
             return 0;
         }
@@ -44,9 +39,5 @@ public class Payment {
         cashValueInserted = 0;
         return changeToReturn;
     }
-
-//  public boolean hasValue(int value) {
-//        return chipknip.HasValue(value);
-//    }
 
 }
