@@ -44,7 +44,7 @@ public class VendingMachineTest {
 		machine.configure(Choice.sprite, Can.sprite, 10, 1);
 		machine.configure(Choice.fanta, Can.fanta, 10, 2);
 
-		machine.setValue(2);
+		machine.addCoins(2);
 		assertEquals(Can.fanta, machine.deliver(Choice.fanta));
 		assertEquals(Can.none, machine.deliver(Choice.sprite));
 	}
@@ -54,7 +54,7 @@ public class VendingMachineTest {
 		machine.configure(Choice.sprite, Can.sprite, 10, 1);
 		machine.configure(Choice.fanta, Can.fanta, 10, 2);
 
-		machine.setValue(2);
+		machine.addCoins(2);
 		assertEquals(Can.sprite, machine.deliver(Choice.sprite));
 		assertEquals(Can.sprite, machine.deliver(Choice.sprite));
 		assertEquals(Can.none, machine.deliver(Choice.sprite));
@@ -65,8 +65,8 @@ public class VendingMachineTest {
 		machine.configure(Choice.sprite, Can.sprite, 10, 1);
 		machine.configure(Choice.fanta, Can.fanta, 10, 2);
 
-		machine.setValue(1);
-		machine.setValue(1);
+		machine.addCoins(1);
+		machine.addCoins(1);
 		assertEquals(Can.sprite, machine.deliver(Choice.sprite));
 		assertEquals(Can.sprite, machine.deliver(Choice.sprite));
 		assertEquals(Can.none, machine.deliver(Choice.sprite));
@@ -75,7 +75,7 @@ public class VendingMachineTest {
 	@Test
 	public void Testreturns_change() {
 		machine.configure(Choice.sprite, Can.sprite, 10, 1);
-		machine.setValue(2);
+		machine.addCoins(2);
 		assertEquals(2, machine.getChange());
 		assertEquals(0, machine.getChange());
 	}
