@@ -3,8 +3,8 @@ package eu.qwan.vender;
 public class Chipknip {
 	public int credits;
 
-	public Chipknip(int initial_value) {
-		credits = initial_value;
+	public Chipknip(int initialValue) {
+		credits = initialValue;
 	}
 
 	public boolean hasValue(int p) {
