@@ -5,24 +5,29 @@ import java.util.Map;
 
 public class VendingMachine {
 	private final Map<Choice, CanContainer> cans = new HashMap<Choice, CanContainer>();
-	private int payment_method;
+	private PaymentMethod paymentMethod;
 	private Chipknip chipknip;
-	private int c = -1;
+	private int change = -1;
 	private int price;
 
-	public void set_value(int v) {
-		payment_method = 1;
-		if (c != -1) {
-			c += v;
+	public enum PaymentMethod {
+		COIN,
+		CHIP
+	}
+
+	public void addCoins(int inputAmount) {
+		paymentMethod = PaymentMethod.COIN;
+		if (this.change != -1) {
+			this.change += inputAmount;
 		} else {
-			c = v;
+			this.change = inputAmount;
 		}
 	}
 
 	public void insert_chip(Chipknip chipknip) {
 		// TODO
 		// can't pay with chip in brittain
-		payment_method = 2;
+		paymentMethod = PaymentMethod.CHIP;
 		this.chipknip = chipknip;
 	}
 
@@ -41,29 +46,29 @@ public class VendingMachine {
 				// or price matches
 			} else {
 
-				switch (payment_method) {
-				case 1: // paying with coins
-					if (c != -1 && cans.get(choice).price <= c) {
-						res = cans.get(choice).getType();
-						c -= cans.get(choice).price;
-					}
-					break;
-				case 2: // paying with chipknip -
-					// TODO: if this machine is in belgium this must be an error
-					// {
-					if (chipknip.HasValue(cans.get(choice).price)) {
-						chipknip.Reduce(cans.get(choice).price);
-						res = cans.get(choice).getType();
-					}
-					break;
-				default:
-					// TODO: Is this a valid situation?:
-					// larry forgot the } else { clause
-					// i added it, but i am acutally not sure as to wether this
-					// is a problem
-					// unknown payment
-					break;
-				// i think(i) nobody inserted anything
+				switch (paymentMethod) {
+					case COIN: // paying with coins
+						if (change != -1 && cans.get(choice).price <= change) {
+							res = cans.get(choice).getType();
+							change -= cans.get(choice).price;
+						}
+						break;
+					case CHIP: // paying with chipknip -
+						// TODO: if this machine is in belgium this must be an error
+						// {
+						if (chipknip.HasValue(cans.get(choice).price)) {
+							chipknip.Reduce(cans.get(choice).price);
+							res = cans.get(choice).getType();
+						}
+						break;
+					default:
+						// TODO: Is this a valid situation?:
+						// larry forgot the } else { clause
+						// i added it, but i am acutally not sure as to wether this
+						// is a problem
+						// unknown payment
+						break;
+					// i think(i) nobody inserted anything
 				}
 			}
 		} else {
@@ -92,9 +97,9 @@ public class VendingMachine {
 
 	public int get_change() {
 		int to_return = 0;
-		if (c > 0) {
-			to_return = c;
-			c = 0;
+		if (change > 0) {
+			to_return = change;
+			change = 0;
 		}
 		return to_return;
 	}
