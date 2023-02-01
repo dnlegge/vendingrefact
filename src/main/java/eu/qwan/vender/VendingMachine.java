@@ -10,7 +10,7 @@ public class VendingMachine {
 	private int c = -1;
 	private int price;
 
-	public void set_value(int v) {
+	public void setValue(int v) {
 		payment_method = 1;
 		if (c != -1) {
 			c += v;
@@ -19,7 +19,7 @@ public class VendingMachine {
 		}
 	}
 
-	public void insert_chip(Chipknip chipknip) {
+	public void insertChip(Chipknip chipknip) {
 		// TODO
 		// can't pay with chip in brittain
 		payment_method = 2;
@@ -51,8 +51,8 @@ public class VendingMachine {
 				case 2: // paying with chipknip -
 					// TODO: if this machine is in belgium this must be an error
 					// {
-					if (chipknip.HasValue(cans.get(choice).price)) {
-						chipknip.Reduce(cans.get(choice).price);
+					if (chipknip.hasValue(cans.get(choice).price)) {
+						chipknip.reduce(cans.get(choice).price);
 						res = cans.get(choice).getType();
 					}
 					break;
@@ -90,7 +90,7 @@ public class VendingMachine {
 		return res;
 	}
 
-	public int get_change() {
+	public int getChange() {
 		int to_return = 0;
 		if (c > 0) {
 			to_return = c;
@@ -99,19 +99,19 @@ public class VendingMachine {
 		return to_return;
 	}
 
-	public void configure(Choice choice, Can c, int n) {
-		configure(choice, c, n, 0);
+	public void configure(Choice choice, Can c, int amount) {
+		configure(choice, c, amount, 0);
 	}
 
-	public void configure(Choice choice, Can c, int n, int price) {
+	public void configure(Choice choice, Can c, int amount, int price) {
 		this.price = price;
 		if (cans.containsKey(choice)) {
-			cans.get(choice).setAmount(cans.get(choice).getAmount() + n);
+			cans.get(choice).setAmount(cans.get(choice).getAmount() + amount);
 			return;
 		}
 		CanContainer can = new CanContainer();
 		can.setType(c);
-		can.setAmount(n);
+		can.setAmount(amount);
 		can.setPrice(price);
 		cans.put(choice, can);
 	}

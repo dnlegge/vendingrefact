@@ -7,11 +7,11 @@ public class Chipknip {
 		credits = initial_value;
 	}
 
-	public boolean HasValue(int p) {
+	public boolean hasValue(int p) {
 		return credits >= p;
 	}
 
-	public void Reduce(int p) {
+	public void reduce(int p) {
 		credits -= p;
 	}
 }

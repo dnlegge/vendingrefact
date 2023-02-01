@@ -44,7 +44,7 @@ public class VendingMachineTest {
 		machine.configure(Choice.sprite, Can.sprite, 10, 1);
 		machine.configure(Choice.fanta, Can.fanta, 10, 2);
 
-		machine.set_value(2);
+		machine.setValue(2);
 		assertEquals(Can.fanta, machine.deliver(Choice.fanta));
 		assertEquals(Can.none, machine.deliver(Choice.sprite));
 	}
@@ -54,7 +54,7 @@ public class VendingMachineTest {
 		machine.configure(Choice.sprite, Can.sprite, 10, 1);
 		machine.configure(Choice.fanta, Can.fanta, 10, 2);
 
-		machine.set_value(2);
+		machine.setValue(2);
 		assertEquals(Can.sprite, machine.deliver(Choice.sprite));
 		assertEquals(Can.sprite, machine.deliver(Choice.sprite));
 		assertEquals(Can.none, machine.deliver(Choice.sprite));
@@ -65,8 +65,8 @@ public class VendingMachineTest {
 		machine.configure(Choice.sprite, Can.sprite, 10, 1);
 		machine.configure(Choice.fanta, Can.fanta, 10, 2);
 
-		machine.set_value(1);
-		machine.set_value(1);
+		machine.setValue(1);
+		machine.setValue(1);
 		assertEquals(Can.sprite, machine.deliver(Choice.sprite));
 		assertEquals(Can.sprite, machine.deliver(Choice.sprite));
 		assertEquals(Can.none, machine.deliver(Choice.sprite));
@@ -75,9 +75,9 @@ public class VendingMachineTest {
 	@Test
 	public void Testreturns_change() {
 		machine.configure(Choice.sprite, Can.sprite, 10, 1);
-		machine.set_value(2);
-		assertEquals(2, machine.get_change());
-		assertEquals(0, machine.get_change());
+		machine.setValue(2);
+		assertEquals(2, machine.getChange());
+		assertEquals(0, machine.getChange());
 	}
 
 	@Test
@@ -100,7 +100,7 @@ public class VendingMachineTest {
 	public void Testcheckout_chip_if_chipknip_inserted() {
 		machine.configure(Choice.sprite, Can.sprite, 1, 1);
 		Chipknip chip = new Chipknip(10);
-		machine.insert_chip(chip);
+		machine.insertChip(chip);
 		assertEquals(Can.sprite, machine.deliver(Choice.sprite));
 		assertEquals(9, chip.credits);
 	}
@@ -109,7 +109,7 @@ public class VendingMachineTest {
 	public void Testcheckout_chip_empty() {
 		machine.configure(Choice.sprite, Can.sprite, 1, 1);
 		Chipknip chip = new Chipknip(0);
-		machine.insert_chip(chip);
+		machine.insertChip(chip);
 		assertEquals(Can.none, machine.deliver(Choice.sprite));
 		assertEquals(0, chip.credits);
 	}
