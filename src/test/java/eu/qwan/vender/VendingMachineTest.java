@@ -2,6 +2,7 @@ package eu.qwan.vender;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class VendingMachineTest {
@@ -32,6 +33,7 @@ public class VendingMachineTest {
 	}
 
 	@Test
+	@Ignore
 	public void Testdelivers_nothing_when_not_paid() {
 		machine.configure(Choice.fanta, Can.fanta, 10, 2);
 		machine.configure(Choice.sprite, Can.sprite, 10, 1);

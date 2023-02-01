@@ -46,30 +46,29 @@ public class VendingMachine {
 				// or price matches
 			} else {
 
-				switch (paymentMethod) {
-					case COIN: // paying with coins
-						if (change != -1 && cans.get(choice).price <= change) {
-							res = cans.get(choice).getType();
-							change -= cans.get(choice).price;
-						}
-						break;
-					case CHIP: // paying with chipknip -
-						// TODO: if this machine is in belgium this must be an error
-						// {
-						if (chipknip.HasValue(cans.get(choice).price)) {
-							chipknip.Reduce(cans.get(choice).price);
-							res = cans.get(choice).getType();
-						}
-						break;
-					default:
-						// TODO: Is this a valid situation?:
-						// larry forgot the } else { clause
-						// i added it, but i am acutally not sure as to wether this
-						// is a problem
-						// unknown payment
-						break;
-					// i think(i) nobody inserted anything
+				if (PaymentMethod.COIN.equals(paymentMethod)) {
+					if (change != -1 && cans.get(choice).price <= change) {
+						res = cans.get(choice).getType();
+						change -= cans.get(choice).price;
+					}
+				} else if (PaymentMethod.CHIP.equals(paymentMethod)) { // paying with chipknip -
+					// TODO: if this machine is in belgium this must be an error
+					// {
+					if (chipknip.HasValue(cans.get(choice).price)) {
+						chipknip.Reduce(cans.get(choice).price);
+						res = cans.get(choice).getType();
+					}
+				} else {
+					throw new UnsupportedPaymentMethodException("Unsupported payment method");
 				}
+
+				// TODO: Is this a valid situation?:
+				// larry forgot the } else { clause
+				// i added it, but i am acutally not sure as to wether this
+				// is a problem
+				// unknown payment
+				// i think(i) nobody inserted anything
+
 			}
 		} else {
 			res = Can.none;
